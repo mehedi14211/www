@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, useScroll, useSpring } from "motion/react";
+import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import Logo from "./components/Logo";
 import Hero from "./components/Hero";
 import ProblemSection from "./components/ProblemSection";
@@ -33,6 +33,20 @@ export default function App() {
     damping: 30,
     restDelta: 0.001
   });
+
+  const [showFloatingActions, setShowFloatingActions] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowFloatingActions(true);
+      } else {
+        setShowFloatingActions(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -274,6 +288,84 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Bottom-Right Floating Quick Actions Bar */}
+      <AnimatePresence>
+        {showFloatingActions && (
+          <motion.div
+            initial={{ opacity: 0, y: 25, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 25, scale: 0.92 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            className={`fixed bottom-4 right-4 z-40 md:hidden p-[1px] rounded-full transition-all duration-300 hover:scale-105 active:scale-[0.98] ${
+              theme === "midnight"
+                ? "bg-gradient-to-r from-[#E10600] via-[#3B82F6] to-[#F59E0B] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+                : "bg-gradient-to-r from-[#E10600]/40 via-[#3B82F6]/30 to-[#F59E0B]/40 shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+            }`}
+            id="mobile-floating-dock"
+          >
+            <div 
+              className={`flex items-center justify-between gap-2 p-1 pl-3 pr-1 rounded-full backdrop-blur-xl h-[34px] ${
+                theme === "midnight"
+                  ? "bg-zinc-950/95 text-white"
+                  : "bg-white/95 text-zinc-900"
+              }`}
+              id="mobile-floating-dock-inner"
+            >
+              {/* Company Logo / Image Logo Container */}
+              <div className="flex items-center justify-center select-none" id="floating-dock-logo-container">
+                <img 
+                  src="/logo.png" 
+                  alt="mhf logo" 
+                  className="h-[14px] w-auto object-contain pointer-events-none block transition-all duration-300"
+                  style={{ 
+                    filter: theme === "midnight" 
+                      ? "brightness(0) invert(1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.3))" 
+                      : "none" 
+                  }}
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              
+              {/* Minimal Divider to Segment UI */}
+              <div 
+                className={`w-[1px] h-3.5 rounded-full shrink-0 transition-colors ${
+                  theme === "midnight" ? "bg-zinc-800" : "bg-zinc-200"
+                }`} 
+                id="floating-dock-divider"
+              />
+
+              <div className="flex items-center gap-1.5" id="floating-dock-actions-container">
+                {/* View Pricing Button */}
+                <motion.button
+                  whileTap={{ scale: 0.96 }}
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => handleScrollTo("pricing-section")}
+                  className={`h-[26px] px-2.5 text-[9px] font-sans font-bold uppercase tracking-wider rounded-full active:scale-95 transition-all cursor-pointer whitespace-nowrap flex items-center justify-center border ${
+                    theme === "midnight"
+                      ? "bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-850"
+                      : "bg-zinc-100/90 border-zinc-200 text-zinc-700 hover:bg-zinc-150"
+                  }`}
+                  id="floating-dock-pricing-btn"
+                >
+                  Pricing
+                </motion.button>
+
+                {/* Book Now Button */}
+                <motion.button
+                  whileTap={{ scale: 0.96 }}
+                  whileHover={{ scale: 1.04 }}
+                  onClick={openBooking}
+                  className="animate-color-flow h-[26px] px-3 text-white text-[9px] font-sans font-bold uppercase tracking-wider rounded-full active:scale-95 transition-all cursor-pointer shadow-md shadow-red-500/10 whitespace-nowrap flex items-center justify-center"
+                  id="floating-dock-book-btn"
+                >
+                  Book Now
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Analytics Live Tracking Dashboard */}
       <AnalyticsDashboard />

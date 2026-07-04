@@ -55,14 +55,20 @@ export default function PricingSection({ onBookCall }: PricingSectionProps) {
           id="pricing-bento-card"
         >
           
-          {/* Badge: Best seller / Premium only */}
-          <div className="absolute top-4 right-4 bg-indigo-600 border border-indigo-500 text-white font-mono text-[9px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md shadow-indigo-600/20">
+          {/* Badge: Best seller / Premium only (hidden on mobile to prevent overlapping, placed inline instead) */}
+          <div className="absolute top-4 right-4 md:flex hidden bg-indigo-600 border border-indigo-500 text-white font-mono text-[9px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full items-center gap-1 shadow-md shadow-indigo-600/20">
             <Flame className="h-3 w-3" /> Signature Package
           </div>
 
           {/* Left: Plan Pricing details (40% width) */}
           <div className="md:col-span-5 p-8 md:p-10 bg-white border-r border-zinc-200 flex flex-col justify-between text-left" id="pricing-cost-panel">
             <div className="space-y-4">
+              {/* Mobile-only inline badge to prevent overlapping the blueprint series text */}
+              <div className="md:hidden flex mb-2">
+                <span className="bg-indigo-600 border border-indigo-500 text-white font-mono text-[9px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md shadow-indigo-600/20">
+                  <Flame className="h-3 w-3" /> Signature Package
+                </span>
+              </div>
               <span className="text-xs font-mono text-indigo-600 uppercase tracking-widest font-bold block">THE BLUEPRINT SERIES</span>
               <h3 className="font-display text-2xl font-extrabold text-zinc-950 tracking-tight">The MHF Studio Package</h3>
               <p className="text-zinc-500 text-xs sm:text-sm font-light leading-relaxed">
