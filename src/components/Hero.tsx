@@ -28,9 +28,7 @@ export default function Hero({ onBookCall, onExploreEngine, theme }: HeroProps) 
         <div className="absolute top-[20%] right-[15%] w-[450px] h-[450px] bg-[radial-gradient(circle_at_center,rgba(225,6,0,0.04)_0%,rgba(99,102,241,0.06)_50%,transparent_100%)] rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-[10%] left-[10%] w-[350px] h-[350px] bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,rgba(225,6,0,0.03)_60%,transparent_100%)] rounded-full blur-3xl pointer-events-none" />
 
-        {/* Elegant Glowing laser lines slicing behind typography for horizontal flow */}
-        <div className="absolute top-[18%] left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent blur-[0.5px]" />
-        <div className="absolute top-[18%] left-1/3 right-1/3 h-[1.5px] bg-gradient-to-r from-transparent via-[#E10600]/30 to-transparent blur-[1.5px]" />
+        {/* Elegant Glowing background glow */}
       </div>
 
       {/* Floating Status Indicator */}

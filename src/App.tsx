@@ -40,6 +40,36 @@ export default function App() {
   });
 
   const [showFloatingActions, setShowFloatingActions] = useState(false);
+  const [dockOffset, setDockOffset] = useState({ x: 0, y: 0 });
+
+  const [pricingRipples, setPricingRipples] = useState<{ id: number; x: number; y: number }[]>([]);
+  const [bookingRipples, setBookingRipples] = useState<{ id: number; x: number; y: number }[]>([]);
+
+  const createRipple = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    setRipples: React.Dispatch<React.SetStateAction<{ id: number; x: number; y: number }[]>>
+  ) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const id = Date.now() + Math.random();
+    setRipples(prev => [...prev, { id, x, y }]);
+    setTimeout(() => {
+      setRipples(prev => prev.filter(r => r.id !== id));
+    }, 600);
+  };
+
+  const handleDockMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - (rect.left + rect.width / 2);
+    const y = e.clientY - (rect.top + rect.height / 2);
+    // Subtle magnetic scaling offset of 18% of relative cursor distance
+    setDockOffset({ x: x * 0.18, y: y * 0.18 });
+  };
+
+  const handleDockMouseLeave = () => {
+    setDockOffset({ x: 0, y: 0 });
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -243,7 +273,7 @@ export default function App() {
         <ProblemSection />
 
         {/* Process Section (The 5-step pipeline) */}
-        <ProcessSection />
+        <ProcessSection theme={theme} />
 
         {/* Work Section (Selected video editing showcase) */}
         <PortfolioSection />
@@ -326,13 +356,27 @@ export default function App() {
         {showFloatingActions && (
           <motion.div
             initial={{ opacity: 0, y: 25, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            animate={{ 
+              opacity: 1, 
+              y: dockOffset.y, 
+              x: dockOffset.x,
+              scale: 1 
+            }}
             exit={{ opacity: 0, y: 25, scale: 0.92 }}
-            transition={{ type: "spring", stiffness: 350, damping: 28 }}
-            className={`fixed bottom-4 right-4 z-40 md:hidden p-[1px] rounded-full transition-all duration-300 hover:scale-105 active:scale-[0.98] ${
+            transition={{
+              type: "spring",
+              stiffness: 280,
+              damping: 24,
+              x: { type: "spring", stiffness: 80, damping: 12 },
+              y: { type: "spring", stiffness: 80, damping: 12 }
+            }}
+            onMouseMove={handleDockMouseMove}
+            onMouseLeave={handleDockMouseLeave}
+            whileHover={{ scale: 1.05 }}
+            className={`fixed bottom-4 right-4 z-40 md:hidden p-[1px] rounded-full transition-[box-shadow,background-color] duration-300 active:scale-[0.98] ${
               theme === "midnight"
-                ? "bg-gradient-to-r from-[#E10600] via-[#3B82F6] to-[#F59E0B] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
-                : "bg-gradient-to-r from-[#E10600]/40 via-[#3B82F6]/30 to-[#F59E0B]/40 shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+                ? "bg-gradient-to-r from-[#E10600] via-[#3B82F6] to-[#F59E0B] shadow-[0_2px_6px_rgba(0,0,0,0.8),_0_8px_20px_rgba(0,0,0,0.7),_0_16px_32px_-4px_rgba(0,0,0,0.6)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.9),_0_16px_40px_rgba(0,0,0,0.8),_0_32px_64px_-8px_rgba(0,0,0,0.7),_0_0_25px_rgba(225,6,0,0.15)]"
+                : "bg-gradient-to-r from-[#E10600]/40 via-[#3B82F6]/30 to-[#F59E0B]/40 shadow-[0_2px_6px_rgba(0,0,0,0.06),_0_8px_20px_rgba(0,0,0,0.05),_0_16px_32px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.08),_0_16px_40px_rgba(0,0,0,0.07),_0_32px_64px_-8px_rgba(0,0,0,0.06)]"
             }`}
             id="mobile-floating-dock"
           >
@@ -372,26 +416,74 @@ export default function App() {
                 <motion.button
                   whileTap={{ scale: 0.96 }}
                   whileHover={{ scale: 1.02 }}
-                  onClick={() => handleScrollTo("pricing-section")}
-                  className={`h-[26px] px-2.5 text-[9px] font-sans font-bold uppercase tracking-wider rounded-full active:scale-95 transition-all cursor-pointer whitespace-nowrap flex items-center justify-center border ${
+                  onClick={(e) => {
+                    createRipple(e, setPricingRipples);
+                    handleScrollTo("pricing-section");
+                  }}
+                  className={`relative overflow-hidden h-[26px] px-2.5 text-[9px] font-sans font-bold uppercase tracking-wider rounded-full active:scale-95 transition-all cursor-pointer whitespace-nowrap flex items-center justify-center border ${
                     theme === "midnight"
                       ? "bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-850"
                       : "bg-zinc-100/90 border-zinc-200 text-zinc-700 hover:bg-zinc-150"
                   }`}
                   id="floating-dock-pricing-btn"
                 >
-                  Pricing
+                  <span className="relative z-10 pointer-events-none">Pricing</span>
+                  <AnimatePresence>
+                    {pricingRipples.map(ripple => (
+                      <motion.span
+                        key={ripple.id}
+                        initial={{ scale: 0, opacity: 0.5 }}
+                        animate={{ scale: 4, opacity: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="absolute rounded-full pointer-events-none"
+                        style={{
+                          left: ripple.x,
+                          top: ripple.y,
+                          width: 20,
+                          height: 20,
+                          x: "-50%",
+                          y: "-50%",
+                          backgroundColor: theme === "midnight" ? "rgba(255, 255, 255, 0.25)" : "rgba(0, 0, 0, 0.12)",
+                        }}
+                      />
+                    ))}
+                  </AnimatePresence>
                 </motion.button>
 
                 {/* Book Now Button */}
                 <motion.button
                   whileTap={{ scale: 0.96 }}
                   whileHover={{ scale: 1.04 }}
-                  onClick={openBooking}
-                  className="animate-color-flow h-[26px] px-3 text-white text-[9px] font-sans font-bold uppercase tracking-wider rounded-full active:scale-95 transition-all cursor-pointer shadow-md shadow-red-500/10 whitespace-nowrap flex items-center justify-center"
+                  onClick={(e) => {
+                    createRipple(e, setBookingRipples);
+                    openBooking();
+                  }}
+                  className="relative overflow-hidden animate-color-flow h-[26px] px-3 text-white text-[9px] font-sans font-bold uppercase tracking-wider rounded-full active:scale-95 transition-all cursor-pointer shadow-md shadow-red-500/10 whitespace-nowrap flex items-center justify-center"
                   id="floating-dock-book-btn"
                 >
-                  Book Now
+                  <span className="relative z-10 pointer-events-none">Book Now</span>
+                  <AnimatePresence>
+                    {bookingRipples.map(ripple => (
+                      <motion.span
+                        key={ripple.id}
+                        initial={{ scale: 0, opacity: 0.5 }}
+                        animate={{ scale: 4, opacity: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="absolute rounded-full pointer-events-none"
+                        style={{
+                          left: ripple.x,
+                          top: ripple.y,
+                          width: 20,
+                          height: 20,
+                          x: "-50%",
+                          y: "-50%",
+                          backgroundColor: "rgba(255, 255, 255, 0.35)",
+                        }}
+                      />
+                    ))}
+                  </AnimatePresence>
                 </motion.button>
               </div>
             </div>
