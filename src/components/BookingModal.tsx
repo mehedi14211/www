@@ -1140,7 +1140,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       {/* Direct External Calendly Link */}
                       <div className="mt-4 text-center">
                         <a
-                          href="https://calendly.com" 
+                          href="https://calendly.com/mehedihassanfahim70722/30min" 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-500 text-xs font-bold transition-colors font-mono uppercase tracking-wider"
