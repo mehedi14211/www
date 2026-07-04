@@ -1,0 +1,6 @@
+{
+  "name": "MHF Studio",
+  "description": "Premium video editing agency and full-service post-production studio.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

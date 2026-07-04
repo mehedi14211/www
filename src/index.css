@@ -1,0 +1,337 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Custom Bento Grid colors matching MHF Studio guidelines */
+  --color-mhf-black: #FFFFFF;         /* Pristine White for Bento Cards */
+  --color-mhf-graphite: #E4E4E7;      /* Clean Zinc-200 for Bento Borders */
+  --color-mhf-white: #09090B;         /* Solid Zinc-950 for high-contrast typography */
+  --color-mhf-silver: #3F3F46;        /* Muted Zinc-700 text values */
+  --color-mhf-gray: #71717A;          /* Light Zinc-500 helper values */
+  --color-mhf-red: #E10600;           /* Signature Signal Red Accent (5%) */
+  
+  --color-accent-gradient-start: #4F46E5; /* Indigo-600 */
+  --color-accent-gradient-mid: #6366F1;   /* Indigo-500 */
+  --color-accent-gradient-end: #E10600;   /* Signal Red transition */
+}
+
+@layer base {
+  body {
+    background-color: #F9FAFB;        /* Super clean light bento background */
+    color: #111827;                   /* Dense Zinc-900 primary text */
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  /* Hide default browser cursor on desktop to allow custom magnetic cursor */
+  @media (pointer: fine) {
+    html, body, button, a, select, textarea, input, [role="button"], .cursor-pointer {
+      cursor: none !important;
+    }
+  }
+
+  /* Custom bento-style scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F9FAFB;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #D4D4D8;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4F46E5;
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
+  }
+  .border-glow {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02), 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* --- Midnight Theme (Dark mode with Signal Red Accent) --- */
+html.theme-midnight {
+  --theme-bg: #030303;
+  --theme-text: #F4F4F5;
+  --theme-card-bg: #0C0C0F;
+  --theme-border: #1F1F24;
+  --theme-primary: #E10600; /* Signature Signal Red Accent */
+  
+  background-color: var(--theme-bg) !important;
+  color: var(--theme-text) !important;
+}
+
+/* Base override for Midnight Theme */
+html.theme-midnight body {
+  background-color: #030303 !important;
+  color: #F4F4F5 !important;
+}
+
+html.theme-midnight ::-webkit-scrollbar-track {
+  background: #030303;
+}
+html.theme-midnight ::-webkit-scrollbar-thumb {
+  background: #27272A;
+}
+html.theme-midnight ::-webkit-scrollbar-thumb:hover {
+  background: #E10600;
+}
+
+/* Header Override */
+html.theme-midnight header {
+  background-color: rgba(3, 3, 3, 0.9) !important;
+  border-color: #1F1F24 !important;
+}
+
+html.theme-midnight .bg-white {
+  background-color: #0C0C0F !important;
+}
+
+html.theme-midnight .bg-zinc-50 {
+  background-color: #0E0E12 !important;
+}
+
+html.theme-midnight .bg-zinc-100 {
+  background-color: #1F1F24 !important;
+}
+
+html.theme-midnight .bg-\[\#F9FAFB\] {
+  background-color: #030303 !important;
+}
+
+/* Borders */
+html.theme-midnight .border-zinc-200,
+html.theme-midnight .border-zinc-200\/80,
+html.theme-midnight .border-zinc-100 {
+  border-color: #1F1F24 !important;
+}
+
+/* Typography Colors */
+html.theme-midnight .text-zinc-950,
+html.theme-midnight .text-zinc-900 {
+  color: #FFFFFF !important;
+}
+
+html.theme-midnight .text-zinc-800,
+html.theme-midnight .text-zinc-700 {
+  color: #E4E4E7 !important;
+}
+
+html.theme-midnight .text-zinc-600,
+html.theme-midnight .text-zinc-500 {
+  color: #A1A1AA !important;
+}
+
+html.theme-midnight .text-zinc-400 {
+  color: #71717A !important;
+}
+
+/* Specific Accent Overrides to Signal Red */
+html.theme-midnight .bg-indigo-600 {
+  background-color: #E10600 !important;
+}
+
+html.theme-midnight .hover\:bg-indigo-500:hover {
+  background-color: #B50500 !important;
+}
+
+html.theme-midnight .text-indigo-600 {
+  color: #E10600 !important;
+}
+
+html.theme-midnight .border-indigo-600 {
+  border-color: #E10600 !important;
+}
+
+html.theme-midnight .border-indigo-200 {
+  border-color: rgba(225, 6, 0, 0.3) !important;
+}
+
+html.theme-midnight .bg-indigo-50 {
+  background-color: rgba(225, 6, 0, 0.08) !important;
+}
+
+html.theme-midnight .bg-indigo-50\/40 {
+  background-color: rgba(225, 6, 0, 0.05) !important;
+}
+
+html.theme-midnight .text-indigo-950 {
+  color: #FFFFFF !important;
+}
+
+html.theme-midnight .text-indigo-400 {
+  color: #FF524D !important;
+}
+
+html.theme-midnight .shadow-indigo-600\/15 {
+  box-shadow: 0 10px 15px -3px rgba(225, 6, 0, 0.15) !important;
+}
+
+html.theme-midnight .shadow-indigo-600\/25:hover {
+  box-shadow: 0 10px 15px -3px rgba(225, 6, 0, 0.25) !important;
+}
+
+/* Hover background styling overrides */
+html.theme-midnight .hover\:bg-zinc-50:hover {
+  background-color: #1F1F24 !important;
+}
+
+html.theme-midnight .hover\:bg-zinc-100:hover {
+  background-color: #27272A !important;
+}
+
+html.theme-midnight .hover\:border-zinc-300:hover {
+  border-color: #2D2D34 !important;
+}
+
+html.theme-midnight .hover\:border-indigo-600:hover {
+  border-color: #E10600 !important;
+}
+
+/* Script generator selected buttons in midnight mode */
+html.theme-midnight .border-indigo-600.bg-indigo-50\/40 {
+  border-color: #E10600 !important;
+  background-color: rgba(225, 6, 0, 0.1) !important;
+  color: #FFFFFF !important;
+}
+
+/* Gradient and overlay fixes for midnight mood */
+html.theme-midnight .bg-gradient-to-r.from-indigo-600.via-indigo-500.to-mhf-red {
+  background-image: linear-gradient(to right, #E10600, #FF524D, #E10600) !important;
+}
+
+html.theme-midnight [class*="radial-gradient"] {
+  background-image: none !important;
+}
+
+/* Optimization for premium poppy buttons and interactive elements in Midnight Mode */
+html.theme-midnight .bg-indigo-600 {
+  background-color: #E10600 !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 4px 20px rgba(225, 6, 0, 0.35) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html.theme-midnight .bg-indigo-600:hover {
+  background-color: #FF1F17 !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 4px 25px rgba(225, 6, 0, 0.55) !important;
+  transform: scale(1.02) !important;
+}
+
+html.theme-midnight .bg-zinc-950 {
+  background-color: #121216 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 4px 15px rgba(225, 6, 0, 0.15) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html.theme-midnight .bg-zinc-950:hover {
+  background-color: #1A1A22 !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 4px 22px rgba(225, 6, 0, 0.25) !important;
+  transform: scale(1.02) !important;
+}
+
+html.theme-midnight button.border,
+html.theme-midnight button.border-zinc-200,
+html.theme-midnight button.border-zinc-200\/80,
+html.theme-midnight button.border-zinc-300,
+html.theme-midnight a.border,
+html.theme-midnight #theme-toggle-desktop,
+html.theme-midnight #theme-toggle-mobile {
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  background-color: #0E0E12 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html.theme-midnight button.border:hover,
+html.theme-midnight button.border-zinc-200:hover,
+html.theme-midnight button.border-zinc-300:hover,
+html.theme-midnight a.border:hover,
+html.theme-midnight #theme-toggle-desktop:hover,
+html.theme-midnight #theme-toggle-mobile:hover {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  background-color: #1A1A22 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.08) !important;
+}
+
+html.theme-midnight .bg-indigo-500\/5 {
+  background-color: rgba(225, 6, 0, 0.03) !important;
+}
+
+html.theme-midnight .mobile-nav-panel,
+html.theme-midnight #mobile-nav-panel {
+  background-color: #0C0C0F !important;
+  border-color: #1F1F24 !important;
+}
+
+html.theme-midnight #mobile-nav-panel button {
+  border-color: #1F1F24 !important;
+  color: #E4E4E7 !important;
+}
+
+html.theme-midnight #mobile-nav-panel button:hover {
+  color: #E10600 !important;
+}
+
+/* Modals */
+html.theme-midnight .bg-white\/80 {
+  background-color: rgba(12, 12, 15, 0.8) !important;
+}
+
+/* Inputs / Select elements in Strategizer */
+html.theme-midnight select,
+html.theme-midnight textarea,
+html.theme-midnight input {
+  background-color: #0E0E12 !important;
+  border-color: #1F1F24 !important;
+  color: #FFFFFF !important;
+}
+
+/* Logo color optimization for dark themes/areas: turns the logo fully white while keeping transparency */
+html.theme-midnight .mhf-logo-img,
+#app-footer .mhf-logo-img {
+  filter: brightness(0) invert(1) !important;
+}
+
+/* Color flow gradient animation for premium buttons */
+@keyframes colorFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-color-flow {
+  background: linear-gradient(135deg, #E10600, #3B82F6, #F59E0B, #E10600) !important;
+  background-size: 300% 300% !important;
+  animation: colorFlow 6s ease infinite !important;
+  border: none !important;
+}
+
+.animate-color-flow:hover {
+  animation-duration: 3s !important;
+  box-shadow: 0 0 20px rgba(225, 6, 0, 0.45) !important;
+}
+
+
+
