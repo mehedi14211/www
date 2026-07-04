@@ -22,7 +22,12 @@ export default function App() {
   const [theme, setTheme] = useState<"light" | "midnight">(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("mhf-theme");
-      return (stored === "midnight" ? "midnight" : "light") as "light" | "midnight";
+      if (stored === "midnight" || stored === "light") {
+        return stored as "light" | "midnight";
+      }
+      // Check system color scheme preference
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return prefersDark ? "midnight" : "light";
     }
     return "light";
   });
@@ -35,6 +40,33 @@ export default function App() {
   });
 
   const [showFloatingActions, setShowFloatingActions] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Only auto-update if the user hasn't manually set a preference yet
+      const hasStoredPreference = localStorage.getItem("mhf-theme") !== null;
+      if (!hasStoredPreference) {
+        setTheme(e.matches ? "midnight" : "light");
+      }
+    };
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleChange);
+    } else {
+      mediaQuery.addListener(handleChange);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
